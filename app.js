@@ -24,8 +24,7 @@ let stopIntervalId;
             if (targetData.length === 0) return;
             nowTimestamp = targetData[0].updatetime;
             for (let i = 0; i < targetData.length; i += 1) {
-                console.log(targetData[i].id);
-                // sendLineNotify(`\nhttps://rent.591.com.tw/rent-detail-${targetData[i].id}.html`, process.env.LINE_NOTIFY_TOKEN);
+                sendLineNotify(`\nhttps://rent.591.com.tw/rent-detail-${targetData[i].id}.html`, process.env.LINE_NOTIFY_TOKEN);
             }
         } catch (error) {
             clearInterval(stopIntervalId);
