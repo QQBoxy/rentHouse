@@ -5,10 +5,9 @@ const { getRequest } = require('./lib/request');
 const sendLineNotify = require('./lib/sendLineNotify');
 
 let nowTimestamp = Math.floor(Date.now() / 1000);
-let stopIntervalId;
 
 (() => {
-    (new CronJob(process.env.REQUEST_FREQUENCY, async () => {
+    const job = new CronJob(process.env.REQUEST_FREQUENCY, async () => {
         console.log(`${new Date()}: '我還活著'`);
         try {
             const resp = await getRequest({
@@ -27,9 +26,10 @@ let stopIntervalId;
                 sendLineNotify(`\nhttps://rent.591.com.tw/rent-detail-${targetData[i].id}.html`, process.env.LINE_NOTIFY_TOKEN);
             }
         } catch (error) {
-            clearInterval(stopIntervalId);
             console.error(`Fetch the 591 rent fail: ${error}`);
             sendLineNotify('\n好像出事了! 檢查一下吧。');
+            job.stop();
         }
-    }, null, true, 'Asia/Taipei')).start();
+    }, null, true, 'Asia/Taipei');
+    job.start();
 })();
